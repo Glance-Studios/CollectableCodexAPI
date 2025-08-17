@@ -90,7 +90,7 @@ public abstract class PlayerCollectable implements Collectable, Discoverable {
     public CommandConfig<? extends CommandInfo> commandsOnReplay() {
         return commandsOnDiscover();
     }
-    
+
     @Override
     public void onDiscover(@NotNull Player player) {
         // default no-op
