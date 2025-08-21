@@ -6,6 +6,7 @@ import com.glance.codex.api.collectable.config.model.command.CommandConfig;
 import com.glance.codex.api.collectable.config.model.command.CommandInfo;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Abstract base class for a {@link Collectable} that is also {@link Discoverable}
@@ -43,6 +44,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class PlayerCollectable implements Collectable, Discoverable {
 
+    /* Discover Messages Commands */
+
     /**
      * @return a global broadcast message shown to all players when this collectable is discovered,
      * or an empty string if none
@@ -75,6 +78,8 @@ public abstract class PlayerCollectable implements Collectable, Discoverable {
         return playerMessageOnDiscover();
     }
 
+    /* Discover Commands */
+
     /**
      * @return the command set to execute when discovered,
      * or an empty command config if none
@@ -89,6 +94,36 @@ public abstract class PlayerCollectable implements Collectable, Discoverable {
      */
     public CommandConfig<? extends CommandInfo> commandsOnReplay() {
         return commandsOnDiscover();
+    }
+
+    /* Menu Commands */
+
+    /**
+     * @return the command set to execute when the unlocked menu item
+     * is left-clicked
+     * <p>
+     * defaults to null
+     */
+    public @Nullable CommandConfig<? extends CommandInfo> commandsOnMenuLeftClick() { return null; }
+
+    /**
+     * @return the command set to execute when the unlocked menu item
+     * is right-clicked
+     * <p>
+     * defaults to left-clicks setting
+     */
+    public @Nullable CommandConfig<? extends CommandInfo> commandsOnMenuRightClick() {
+        return commandsOnMenuLeftClick();
+    }
+
+    /**
+     * @return the command set to execute when the unlocked menu item
+     * is shift-clicked
+     * <p>
+     * defaults to left-clicks setting
+     */
+    public @Nullable CommandConfig<? extends CommandInfo> commandsOnShiftClick() {
+        return commandsOnMenuLeftClick();
     }
 
     @Override

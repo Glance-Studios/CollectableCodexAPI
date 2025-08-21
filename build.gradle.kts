@@ -1,13 +1,13 @@
 plugins {
     id("io.freefair.lombok") version "8.11"
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.17"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.18"
     `maven-publish`
     `java-library`
     java
 }
 
 group = "com.glance.codex"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()

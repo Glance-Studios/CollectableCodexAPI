@@ -1,5 +1,7 @@
 # Collectable Codex API
 
+[![](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/Glance-Studios/CollectableCodexAPI/releases)
+
 The **Collectable Codex API** is a lightweight public library for integrating with the **Collections / Discoverables system**.  
 It provides a generic, extensible framework for managing *collectables* in Minecraft servers, such as lore notes, recipes, rare fish, music, or hidden easter eggs
 
@@ -34,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.glance.codex:codex-api:1.0.0")
+    compileOnly("com.glance.codex:codex-api:<version>")
 }
 ```
 
