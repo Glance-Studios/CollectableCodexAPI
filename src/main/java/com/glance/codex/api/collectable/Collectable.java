@@ -66,9 +66,31 @@ public interface Collectable {
     boolean showWhenLocked();
 
     /**
-     * @return true if players may replay this collectable after unlocking
+     * Whether this collectable can be replayed after being discovered.
+     *
+     * @return true if replay is allowed
      */
-    boolean allowReplay();
+    default boolean allowReplay() {
+        return true;
+    }
+
+    /**
+     * Whether replay events should be persisted/tracked.
+     *
+     * @return true if replays should be recorded
+     */
+    default boolean trackReplays() {
+        return true;
+    }
+
+    /**
+     * Whether clicking this collectable should trigger a replay.
+     *
+     * @return true if replay should occur on click
+     */
+    default boolean replayOnClick() {
+        return true;
+    }
 
     /**
      * Attaches metadata to this collectable, typically loaded from config
