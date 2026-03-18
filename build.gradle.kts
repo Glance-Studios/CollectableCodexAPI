@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.glance.codex"
-version = "1.1.1"
+version = "1.1.2"
 
 repositories {
     mavenCentral()
