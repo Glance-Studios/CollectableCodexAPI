@@ -19,6 +19,7 @@ import java.util.Set;
  *   <li>{@link #unlocks} - Set of unlocked IDs per repository namespace</li>
  *   <li>{@link #firstUnlockedAt} - First-time unlock timestamps per ID</li>
  *   <li>{@link #lastReplayedAt} - Last replay timestamps per ID</li>
+ *   <li>{@link #counts} - Accumulated counts per ID</li>
  * </ul>
  *
  * <p>All timestamps are stored in epoch milliseconds</p>
@@ -35,6 +36,8 @@ public class PlayerCollectables {
     private Map<String, Map<String, Long>> firstUnlockedAt = new HashMap<>();
     /** Map of namespace -> (ID -> last replayed time) */
     private Map<String, Map<String, Long>> lastReplayedAt = new HashMap<>();
+    /** Map of namespace -> (ID -> accumulated count) */
+    private Map<String, Map<String, Long>> counts = new HashMap<>();
 
     /**
      * Checks if the given entry ID is unlocked in a namespace
@@ -99,6 +102,57 @@ public class PlayerCollectables {
      */
     public void markReplay(@NotNull NamespacedKey key, long when) {
         markReplay(key.getNamespace(), key.getKey(), when);
+    }
+
+    /**
+     * Reads the accumulated count for an entry
+     *
+     * @param namespace namespace of the entry
+     * @param id entry ID
+     * @return the count, or 0 if the entry has never been counted
+     */
+    public long count(@NotNull String namespace, @NotNull String id) {
+        return counts.getOrDefault(namespace, Map.of()).getOrDefault(id, 0L);
+    }
+
+    /**
+     * Reads the accumulated count for the given namespaced key
+     */
+    public long count(@NotNull NamespacedKey key) {
+        return count(key.getNamespace(), key.getKey());
+    }
+
+    /**
+     * Adds to the count for an entry, never dropping below zero
+     *
+     * @param namespace namespace of the entry
+     * @param id entry ID
+     * @param by amount to add, may be negative
+     * @return the count after the change
+     */
+    public long addCount(@NotNull String namespace, @NotNull String id, long by) {
+        Map<String, Long> inNamespace = counts.computeIfAbsent(namespace, k -> new HashMap<>());
+        long next = Math.max(0L, inNamespace.getOrDefault(id, 0L) + by);
+        inNamespace.put(id, next);
+        return next;
+    }
+
+    /**
+     * Adds to the count for the given namespaced key
+     */
+    public long addCount(@NotNull NamespacedKey key, long by) {
+        return addCount(key.getNamespace(), key.getKey(), by);
+    }
+
+    /**
+     * Overwrites the count for an entry
+     *
+     * @param namespace namespace of the entry
+     * @param id entry ID
+     * @param value the new count, clamped at zero
+     */
+    public void setCount(@NotNull String namespace, @NotNull String id, long value) {
+        counts.computeIfAbsent(namespace, k -> new HashMap<>()).put(id, Math.max(0L, value));
     }
 
 }

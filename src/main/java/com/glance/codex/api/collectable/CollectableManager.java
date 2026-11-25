@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -95,6 +96,36 @@ public interface CollectableManager extends Manager {
      * @return a future completed with the set of unlocked entry IDs
      */
     CompletableFuture<Set<String>> unlockedIds(@NotNull Player player, @NotNull String namespace);
+
+    /**
+     * Adds to a player's count for a collectable
+     * <p>
+     * Counting is independent of unlocking, so callers that want both must do both
+     *
+     * @param player the player
+     * @param key the collectable ID
+     * @param by amount to add, may be negative
+     * @return a future completed with the count after the change
+     */
+    CompletableFuture<Long> addCount(@NotNull Player player, @NotNull NamespacedKey key, long by);
+
+    /**
+     * Reads a player's count for a collectable
+     *
+     * @param player the player
+     * @param key the collectable ID
+     * @return a future completed with the count, or 0 if never counted
+     */
+    CompletableFuture<Long> count(@NotNull Player player, @NotNull NamespacedKey key);
+
+    /**
+     * Reads every counted entry within a repository for a player
+     *
+     * @param player the player
+     * @param namespace the repository namespace
+     * @return a future completed with a map of entry ID to count
+     */
+    CompletableFuture<Map<String, Long>> counts(@NotNull Player player, @NotNull String namespace);
 
     /**
      * Relocks a collectable for a player, removing it from their unlocked state

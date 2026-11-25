@@ -3,6 +3,7 @@ package com.glance.codex.api.data.storage;
 import com.glance.codex.api.data.PlayerCollectables;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -87,6 +88,49 @@ public interface CollectableStorage {
      */
     CompletableFuture<Boolean> isUnlocked(
             @NotNull UUID playerId, @NotNull String namespace, @NotNull String id);
+
+    /**
+     * Adds to the stored count for an entry, never dropping below zero
+     *
+     * @param playerId UUID of the player
+     * @param namespace repository namespace
+     * @param id entry ID
+     * @param by amount to add, may be negative
+     * @return future with the count after the change
+     */
+    default CompletableFuture<Long> addCount(
+            @NotNull UUID playerId, @NotNull String namespace,
+            @NotNull String id, long by
+    ) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Reads the stored count for an entry
+     *
+     * @param playerId UUID of the player
+     * @param namespace repository namespace
+     * @param id entry ID
+     * @return future with the count, or 0 if the entry has never been counted
+     */
+    default CompletableFuture<Long> getCount(
+            @NotNull UUID playerId, @NotNull String namespace, @NotNull String id
+    ) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Loads every counted entry in a namespace
+     *
+     * @param playerId UUID of the player
+     * @param namespace repository namespace
+     * @return future with a map of entry ID to count
+     */
+    default CompletableFuture<Map<String, Long>> loadCounts(
+            @NotNull UUID playerId, @NotNull String namespace
+    ) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Loads a full snapshot of all collectables data for the player
